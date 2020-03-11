@@ -3,10 +3,11 @@ function eval() {
     return;
 }
 
-let exprArr = [];
-let result = '';
+
 function expressionCalculator(expr) {
+    let exprArr = [];
     if (typeof expr === "string"){
+        let result = '';
         expr = expr.replace(/\s/g, '');
         for (let i = 0; i < expr.length; i++){
             if (!isNaN(expr[i])){
@@ -23,23 +24,24 @@ function expressionCalculator(expr) {
                 exprArr.push(expr[i]);
             }
         }
+        expr = exprArr;
     }
-    if (exprArr.filter(item => item === "(").length !== exprArr.filter(item => item === ")").length){
+    if (expr.filter(item => item === "(").length !== expr.filter(item => item === ")").length){
         throw new Error("ExpressionError: Brackets must be paired");
     }
     let inBrackets = [];
-    let iFirstClosedBracket = exprArr.indexOf(')');
-    let iOpenedBracket = exprArr.lastIndexOf('(', iFirstClosedBracket);
+    let iFirstClosedBracket = expr.indexOf(')');
+    let iOpenedBracket = expr.lastIndexOf('(', iFirstClosedBracket);
     if (iFirstClosedBracket !== -1){
-        inBrackets = exprArr.slice(iOpenedBracket+1, iFirstClosedBracket);
-        let result = PlusOrMinus(DivOrMult(inBrackets));
-        let arr1 = exprArr.slice(0, iOpenedBracket).concat(result);
-        exprArr = arr1.concat(exprArr.slice(iFirstClosedBracket+1, exprArr.length))
-        expressionCalculator(exprArr);
+        inBrackets = expr.slice(iOpenedBracket+1, iFirstClosedBracket);
+        let final = PlusOrMinus(DivOrMult(inBrackets));
+        let arr1 = expr.slice(0, iOpenedBracket).concat(final);
+        expr = arr1.concat(expr.slice(iFirstClosedBracket+1, expr.length))
+        expressionCalculator(expr);
     }
-    result = Number(PlusOrMinus(DivOrMult(exprArr)).join()).toFixed(4);
-    result = Number(result);
-    return result;
+    final = Number(PlusOrMinus(DivOrMult(expr)).join()).toFixed(4);
+    final = Number(final);
+    return final;
 }
 
 function DivOrMult(arr){
@@ -74,7 +76,7 @@ function PlusOrMinus(arr){
 }
     
 
-console.log(expressionCalculator(" 60 + 29 / 57 - 85 "));
+console.log(expressionCalculator("(  38 + 52 + 65 - 19  ) * (  72 * 3 / 36 * (  9 / 2 - 17 * 38 / 28  )  ) / 18 / 84"));
 module.exports = {
     expressionCalculator
 }
