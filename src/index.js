@@ -37,7 +37,7 @@ function expressionCalculator(expr) {
         let final = PlusOrMinus(DivOrMult(inBrackets));
         let arr1 = expr.slice(0, iOpenedBracket).concat(final);
         expr = arr1.concat(expr.slice(iFirstClosedBracket+1, expr.length))
-        expressionCalculator(expr);
+        return expressionCalculator(expr);
     }
     final = Number(PlusOrMinus(DivOrMult(expr)).join()).toFixed(4);
     final = Number(final);
